@@ -1,0 +1,107 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+ */
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+Route::get('/',
+function () {
+		return view('welcome');
+	});
+Route::get('taoDB', function () {
+		Schema::create('bang2', function ($table) {
+				$table->increments('id2');
+				$table->string('ten2');
+				$table->integer('tuoi2');
+				$table->integer('khoangoaiId')->unsigned();
+				$table->foreign('khoangoaiId')->references('id')->on('bang1');
+			});
+
+	});
+Route::get('suaDB', function () {
+		Schema::table('bang1', function ($table) {
+				$table->string('ten', 55)->change();
+			});
+
+	});
+Route::get('homepage', function (Request $request) {
+		return view('bigpage', ['data' => $request->session()->get('data')]);
+	});
+Route::get('logout', ['as' => 'logout', 'uses' => 'MyController@logout']);
+
+Route::get('trangchu', function (Request $request) {
+		return view('index', ['data' => $request->session()->get('data'), 'danhsach' => DB::select('select tenmathang,img from mathang')]);
+	});
+Route::get('login', ['as' => 'login', function () {
+			return view('login');
+		}]);
+Route::get('loginsuccess', ['as' => 'access', 'uses' => 'MyController@dangnhap'])->middleware('checklogin');
+Route::get('copy', function () {
+		return view('copy');
+	});
+Route::get('formLaravel', function () {
+		return view('formLaravel');
+	});
+
+Route::get('sstestf', function (Request $request) {
+		return view('sessionForm', ['data' => $request->session()->get('data')]);
+	});
+Route::get('testSS', ['as' => 'sstest', 'uses' => 'MyController@addDataToSession']);
+Route::get('getDB', 'MyController@selectDB');
+Route::get('phantrang', ['as' => 'phantrangForm', 'uses' => 'MyController@phantrangForm']);
+Route::get('KhoaHoc', function () {
+		return "xin chao";
+	})->name('khoahoc');
+Route::get('goiten', function () {
+		return redirect()->route('khoahoc');
+	});
+Route::get('goicontrol', 'MyController@XinChao');
+Route::get('thamso/{so1}&{so2}', 'MyController@XuLy');
+Route::group(['prefix' => 'group'], function () {
+		Route::get('nhanh1', function () {
+				return "day la nhanh 1";
+			});
+		Route::get('nhanh2', function () {
+				return "day la nhanh 2";
+			});
+		Route::get('nhanh3', function () {
+				return "day la nhanh 3";
+			});
+	});
+Route::get('getForm', function () {
+		return view('dangNhap');
+	});
+Route::post('postForm', ['as' => 'postForm', 'uses' => 'MyController@postForm']);
+Route::get('thamSo/{so}', 'MyController@thamSo');
+Route::get('upload', function () {
+		return view('upload');
+	});
+Route::post('postFile', ['as' => 'postFile', 'uses' => 'MyController@postFile']);
+Route::get('khoahoc', 'MyController@themTS');
+Route::get('databaselist', function () {
+		Schema::create('loaisanpham', function ($table) {
+				$table->increments('id');
+				$table->string('ten');
+			});
+	});
+Route::get('goiLayout', function () {
+
+		return view("baitap.master");
+	});
+Route::post('testModel', ['as' => 'testModel', 'uses' => 'MyController@addDL']);
+Route::get('testModelUpdate', 'MyController@updateData');
+Route::get('mainPage', function (Request $request) {
+		return view('mainPage', ['data' => $request->session()->get('data')]);
+	});
+Route::get('logout', ['as' => 'logout', 'uses' => 'MyController@logout']);
+Route::get('testmacro', function () {
+		return response()->caps('nhuttttt');
+	});
