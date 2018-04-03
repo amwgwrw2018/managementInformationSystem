@@ -10,7 +10,7 @@ class nhanVien extends Model
      protected $fillable = [
         'maNv', 'tenNv', 'gioiTinh','ngaySinh','diaChi','SDT','ChucVu'
     ];
-
+public $timestamps = false;
   
   
 }

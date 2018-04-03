@@ -17,9 +17,10 @@ class Phong extends Migration
             $table->increments('maPhong');
             $table->string('soPhong',5);
             $table->integer('kichThuoc');
-            $table->string('loaiPhong');
+            $table->integer('loaiPhong')->unsigned();
             $table->string('tang');
              $table->string('tinhTrangThuePhong');
+             
         });
     }
 

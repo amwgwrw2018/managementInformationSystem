@@ -76,13 +76,20 @@
                     
                     </ul>
                   </li>
+                     <li><a><i class="fa fa-male"></i>Quản lý khách<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{ asset('quanly/khachhang') }}">Danh Sách Khách hàng</a></li>
+                    
+                    </ul>
+                  </li>
                    <li><a><i class="fa fa-home"></i>Quản lý phòng<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ asset('quanly/phong') }}">Danh Sách Phòng</a></li>
                     
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-home"></i>Quản lý đặt phòng<span class="fa fa-chevron-down"></span></a>
+
+                  <li><a href="{{ url('quanly/quanLyDatPhong') }}"><i class="fa fa-home"></i>Quản lý đặt phòng<span class="fa fa-chevron-down"></span></a>
                    
                   </li>
                <!--    <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -195,7 +202,7 @@
                     @if(Session::has('listTinNhan'))
                       @foreach(Session::get('listTinNhan') as $tinNhan)
                     <li class="messageContent">
-                      <a>
+                      <a >
                         <!-- <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span> -->
                         <span>
                           <span>{{ $tinNhan->tenNv}}</span>
@@ -204,8 +211,11 @@
                         <span class="message">
                         {{ $tinNhan->noiDung }}
                         </span>
-                        <button><img src="{{ asset('icon/Xbutton.png') }}" width="30" height="30"></button>
+                        <input type="image"  src="{{ asset('icon/Xbutton.png') }}" width="30" height="30">
                       </a>
+                      <!-- Trigger the modal with a button -->
+
+
                     </li>
                        @endforeach
                 @endif
@@ -256,6 +266,7 @@
               </ul>
             </nav>
           </div>
+
         </div>
         <!-- /top navigation -->
 
@@ -312,14 +323,75 @@
         dom: 'Bfrtip',
         buttons: [
             {
-                text: 'My button',
+                text: '<img src="{{ asset("icon/addUser.png") }}"  width="30" height="30" />',
                 action: function ( e, dt, node, config ) {
-                    alert( 'Button activated' );
+                      $("#addUser").modal();
+                }
+            },
+              {
+                text: '<img src="{{ asset("icon/changeUser.png") }}"  width="30" height="30" />',
+                action: function ( e, dt, node, config ) {
+                      $("#changeUserInfo").modal();
+                }
+            }
+
+
+        ]
+    }
+      );
+        $('#dataPhong').DataTable(
+{
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                text: '<img src="{{ asset("icon/addHouse.png") }}"  width="30" height="30" />',
+                action: function ( e, dt, node, config ) {
+                  $("#addRoom").modal();
+                }
+            },
+              {
+                text: '<img src="{{ asset("icon/changeHouse.png") }}"  width="30" height="30" />',
+                action: function ( e, dt, node, config ) {
+            $("#changeRoomInfo").modal();
+                }
+              }
+        ]
+    }
+      );
+            $('#dataKhachHang').DataTable(
+{
+        dom: 'Bfrtip',
+        buttons: [
+              {
+                text: '<img src="{{ asset("icon/addCustomer.png") }}"  width="30" height="30" />',
+                action: function ( e, dt, node, config ) {
+                  $("#addCustomer").modal();
+                }
+            },
+              {
+                text: '<img src="{{ asset("icon/changeCustomer.png") }}"  width="30" height="30" />',
+                action: function ( e, dt, node, config ) {
+            $("#changeCustomerInfo").modal();
+                }
+              }
+        ]
+    }
+      );
+
+            $('#dataDatPhong').DataTable(
+{
+        dom: 'Bfrtip',
+        buttons: [
+              {
+                text: '<img src="{{ asset("icon/datPhong.png") }}"  width="50" height="50" />',
+                action: function ( e, dt, node, config ) {
+                  $("#reservation").modal();
                 }
             }
         ]
     }
       );
+            
 } );
 </script>
 

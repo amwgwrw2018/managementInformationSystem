@@ -16,11 +16,9 @@ class QuanLyDatPhong extends Migration
      Schema::create('quanLyDatPhong', function (Blueprint $table) {
             $table->integer('maPhong')->unsigned();
             $table->integer('maKH')->unsigned();
-          $table->string('cmnd');
+        
           $table->integer('thoiGianThue');
-  $table->integer('chiPhiThuePhong');
-    $table->integer('chiPhiCongThem');
-      $table->integer('tongChiPhi');
+
        $table->integer('maNvPhuTrachDatPhong')->unsigned();
             $table->timestamps();
             $table->primary(['maPhong', 'maKH']);
