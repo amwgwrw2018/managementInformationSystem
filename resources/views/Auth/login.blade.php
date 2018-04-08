@@ -30,9 +30,9 @@ body{
 	bottom: -40px;
 	width: auto;
 	height: auto;
-	background-image: url({{ asset('image/hotel.jpg') }});
+	background-image: url({{ asset('image/hotelsea.jpg') }});
 	background-size: cover;
-	-webkit-filter: blur(5px);
+	
 	z-index: 0;
 }
 
@@ -165,8 +165,8 @@ body{
 		<br>
 		<form class="login" action="{{ url('loginControl') }}" method="post">
 			{{ csrf_field() }}
-				<input type="text" placeholder="username" name="username"><br>
-				<input type="password" placeholder="password" name="password"><br>
+				<input type="text" placeholder="username" name="username" required><br>
+				<input type="password" placeholder="password" name="password" required><br>
 				<input type="submit" value="Login">
 	
 		</form>

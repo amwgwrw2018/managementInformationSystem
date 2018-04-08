@@ -17,7 +17,7 @@ $.ajax({
 
       var data=JSON.parse(response_data);
       var string="<label for='roomSelect'>Chọn phòng:</label>";
-      string+="<select class='form-control'>";
+      string+="<select class='form-control' name='maPhong'>";
 for(var i =0;i<data.length;i++){
   string+="<option value='"+data[i].maPhong+"'>";
   string+=data[i].soPhong+"--"+data[i].tinhTrangThuePhong;
@@ -43,10 +43,11 @@ string
         <h4 class="modal-title">Đặt phòng</h4>
       </div>
       <div class="modal-body" style="padding: 20px 60px 20px 60px;">
-<form>
+<form action="{{ url('checkIn') }}" method="post">
+  {{ csrf_field() }}
      <div class="form-group">
-    <label for="maPhong">Khách hàng thuê phòng:</label>
-     <select class="form-control">
+    <label for="maKH">Khách hàng thuê phòng:</label>
+     <select class="form-control" name="maKH">
     @if(isset($listKhachHang))
     @foreach($listKhachHang as $khachHang)
     <option value="{{ $khachHang->maKH }}">{{ $khachHang->tenGoiKH }}&emsp;số CMND:{{ $khachHang->soCMND }}</option>
@@ -57,7 +58,7 @@ string
   </div>
   <div class="form-group">
     <label for="maPhong">Chọn loại phòng:</label>
-<select class="form-control" id="getReservedRoomInfoByAjax" onchange="loadInfoByAjax()">
+<select class="form-control" id="getReservedRoomInfoByAjax" onchange="loadInfoByAjax()" name="maLoaiPhong">
     @if(isset($listLoaiPhong))
     @foreach($listLoaiPhong as $loaiPhong)
    
@@ -71,9 +72,10 @@ string
       
 
   </div>
+  <input type="hidden" name="ngayNhanPhong" value="{{ date("Y-m-d") }}">
  <div class="form-group">
-  <label>Chọn số ngày thuê:</label>
-  <input type="number" name="soNgayThue" min="1" class="form-control">
+  <label>Chọn ngày trả phòng:</label>
+  <input type="date" name="ngayTraPhong"  class="form-control">
  </div>
 <div class="form-group">
     <input type="submit" value="Đặt phòng"  class="form-control w3-btn w3-green" >
@@ -141,11 +143,13 @@ string
                     <table id="dataDatPhong" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Mã Phòng</th>
-                          <th>Mã khách hàng</th>
-                          <th>Thời gian thuê</th>
-                          <th>Mã nhân viên phụ trách</th>
-                      
+                          <th>Mã phòng</th>
+                          <th>Số phòng</th>
+                          <th>khách hàng</th>
+                          <th>Số CMND khách hàng</th>
+                          <th>Thời gian nhận phòng</th>
+                          <th>Thời gian trả phòng</th>
+                      <th>Mã nhân viên phụ trách</th>
                   <th>Thao tác</th>
                         </tr>
                       </thead>
@@ -154,14 +158,27 @@ string
                       <tbody>
                       @if(isset($listData))
                         @foreach($listData as $record )
+          
                         <tr>
+
+
                            @foreach($clList as $columm )
+
+            @if($columm=="created_at" or $columm=="updated_at")
+            @elseif($columm=="maPhong")
+                <td>{{ $record->maPhong  }}</td>
+                             <td>{{ $record->soPhong  }}</td>
+                          @elseif($columm=="maKH")
+
+                             <td>{{ $record->tenGoiKH  }}</td>
+                             <td>{{ $record->soCMND }}</td>
+                          @elseif($columm=="maNvPhuTrachDatPhong")
+                           <td>{{ $record->tenNv }}</td>
+                          @else
                           
-                     @if($columm=="created_at" or $columm=="updated_at")
-                @else
                         <td>{{ $record->$columm  }}</td>
               
-             @endif
+            @endif
                        
                            @endforeach
                            <td>

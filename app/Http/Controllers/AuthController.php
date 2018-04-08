@@ -29,7 +29,9 @@ $users=User::where('name',$request->input('username'))->get();
 foreach($users as $user){
 	if(Hash::check($request->input('password'), $user->password)){
 $isExistUser=true;
+$currentUserChucVu=nhanVien::select('ChucVu')->where('maNv',$user->maNv)->get();
 $request->session()->put('currentUser', $user);
+$request->session()->put('currentUserChucVu', $currentUserChucVu);
 	}
 }
 if($isExistUser){
@@ -37,7 +39,14 @@ if($isExistUser){
 $request->session()->put('listNhanVien',nhanVien::all());
 $request->session()->put('listTinNhan',tinnhannhanvien::join('nhanvien', 'nhanvien.maNv', '=', 'tinnhannhanvien.maNvGui')->where('maNvNhan',$request->session()->get('currentUser')->maNv)->get());
 
-	return redirect('/');
+if($currentUserChucVu[0]->ChucVu==4){
+
+	return redirect('quanly/QuanLyChiTraLuong');
+}elseif($currentUserChucVu[0]->ChucVu==1){
+  return redirect('quanly/quanLyDatPhong');
+}else{
+    return redirect('/');
+}
 }else{
 	return redirect('login');
 }

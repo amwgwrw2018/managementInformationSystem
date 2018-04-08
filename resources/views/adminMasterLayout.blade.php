@@ -51,12 +51,13 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               @if(Session::has('currentUser'))
+
               <div class="profile_pic">
                 <img src="{{ asset('image/'.Session::get('currentUser')->anhDaiDien) }}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Xin Chào</span>
-               
+ 
                <h2>{{ Session::get('currentUser')->name }}</h2>
               </div>
                @endif
@@ -70,28 +71,42 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
+                   
+      @if(Session::has('currentUserChucVu') && Session::get('currentUserChucVu')[0]->ChucVu==2 )
+
                   <li><a><i class="fa fa-male"></i>Quản lý nhân viên<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ asset('quanly/nhanVien') }}">Danh Sách Nhân viên</a></li>
+                      <li><a href="{{ url('quanly/nhanVien') }}">Danh Sách Nhân viên</a></li>
                     
                     </ul>
                   </li>
-                     <li><a><i class="fa fa-male"></i>Quản lý khách<span class="fa fa-chevron-down"></span></a>
+             
+@elseif(Session::has('currentUserChucVu') && Session::get('currentUserChucVu')[0]->ChucVu==4 )
+  <li><a href="{{ url('quanly/QuanLyChiTraLuong') }}"><i class="fa fa-money"></i>Chi Trả Lương<span class="fa fa-chevron-down"></span></a>
+                
+                  </li>
+                    <li><a href="{{ url('quanly/QuanLyViPham') }}"><i class="fa fa-cut"></i>Quản lý vi phạm<span class="fa fa-chevron-down"></span></a>
+                
+                  </li>
+                 
+@else
+ <li><a href="{{ url('quanly/quanLyDatPhong') }}"><i class="fa fa-home"></i>Đặt phòng</a>
+                   
+                  </li>
+                          <li><a><i class="fa fa-male"></i>Quản lý khách<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ asset('quanly/khachhang') }}">Danh Sách Khách hàng</a></li>
+                      <li><a href="{{ url('quanly/khachhang') }}">Danh Sách Khách hàng</a></li>
                     
                     </ul>
                   </li>
                    <li><a><i class="fa fa-home"></i>Quản lý phòng<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ asset('quanly/phong') }}">Danh Sách Phòng</a></li>
+                      <li><a href="{{ url('quanly/phong') }}">Danh Sách Phòng</a></li>
                     
                     </ul>
                   </li>
-
-                  <li><a href="{{ url('quanly/quanLyDatPhong') }}"><i class="fa fa-home"></i>Quản lý đặt phòng<span class="fa fa-chevron-down"></span></a>
-                   
-                  </li>
+                  @endif
+                
                <!--    <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="form.html">General Form</a></li>
@@ -391,6 +406,21 @@
         ]
     }
       );
+   $('#dataLuong').DataTable(
+{
+        dom: 'Bfrtip',
+        buttons: [
+              {
+                text: '<img src="{{ asset("icon/moneyPlus.png") }}"  width="30" height="30" />',
+                action: function ( e, dt, node, config ) {
+                  $("#themLuong").modal();
+                }
+            }
+        ]
+    }
+      );
+
+
             
 } );
 </script>

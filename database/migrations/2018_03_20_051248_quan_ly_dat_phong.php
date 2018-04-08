@@ -17,7 +17,7 @@ class QuanLyDatPhong extends Migration
             $table->integer('maPhong')->unsigned();
             $table->integer('maKH')->unsigned();
         
-          $table->integer('thoiGianThue');
+          $table->integer('thoiGianThueTheoNgay');
 
        $table->integer('maNvPhuTrachDatPhong')->unsigned();
             $table->timestamps();

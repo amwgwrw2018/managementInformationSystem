@@ -16,13 +16,14 @@ class QuanLyLuong extends Migration
      Schema::create('QuanLyLuong', function (Blueprint $table) {
             $table->integer('maNV')->unsigned();
             $table->integer('LuongThang');
-            $table->integer('LuongChinhThuc');
+   
           $table->integer('LuongThuongThem');
               $table->integer('LuongBiTru');
       $table->integer('TongLuong');
       $table->string('TinhTrangChiTra');
             $table->string('HinhThucChiTra');
-            $table->primary(['maNV', 'LuongThang']);
+                $table->date('thoiGianDuocChiTra');
+            $table->primary(['maNV', 'thoiGianDuocChiTra']);
               $table->foreign('maNV')->references('maNv')->on('nhanVien');
         });
     }
