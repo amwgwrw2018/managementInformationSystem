@@ -8,4 +8,5 @@ class QuanLyViPham extends Model
 {
   	 protected $table ='quanlyvipham';
      protected $fillable = ['maNV','LoiViPham','ThoiGianViPham','LuongBiTru'];
+       public $timestamps = false;
 }

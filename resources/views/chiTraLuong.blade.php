@@ -5,7 +5,7 @@
 
 
 $.ajax({
-    url:"{{ url('loadInfoByAjaxForLuongCoBan') }}",
+    url:"{{ url('loadInfoByAjaxForLuong') }}",
    
     type: "POST",
    
@@ -14,13 +14,26 @@ $.ajax({
 
      },
     success:function(response_data) {
+var data=JSON.parse(response_data);
+$('#luongThangInput').val(data[0]);
+  
+$( "#listViPham tbody" ).empty();
 
-$('#luongThangInput').val(response_data);
+var count=0;
+for(var i=0;i<data[1].length;i++){
+  var row="<tr><td>"+data[1][i].maNV+"</td><td>"+data[1][i].LoiViPham+"</td><td>"+data[1][i].ThoiGianViPham+"</td><td>"+data[1][i].LuongBiTru+"</td></tr>";
+  $('#listViPham tbody').append(row);
+ count+=data[1][i].LuongBiTru;
+}
+$('#luongTru').val(count);
+
+
 
     }
  });
   }
 </script>
+
 <div id="themLuong" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -29,9 +42,10 @@ $('#luongThangInput').val(response_data);
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Thêm lương nhân sự</h4>
+ <h1 id="ttt"></h1>
       </div>
       <div class="modal-body" style="padding: 20px 60px 20px 60px;">
-      <form action="{{ url('add') }}" method="post">
+      <form action="{{ url('xetLuong') }}" method="post">
         {{  csrf_field() }}
       <div class="form-group">
     @if(Session::has('listNhanVien'))
@@ -45,24 +59,54 @@ $('#luongThangInput').val(response_data);
     @endforeach
   </select>
   </div>
+  <div class="form-group">
+     <label for="thang">Tháng trả lương:</label>
+     <input type="text" name="thangTraLuong" class="form-control" value="{{ date('n') }}" readonly>
+      <label for="thang">Năm trả lương:</label>
+     <input type="text" name="namTraLuong"  class="form-control" value="{{ date('Y') }}" readonly>
+  </div>
 
 <div class="form-group">
   <label for="luongThang">Lương tháng cơ bản( VND ):</label>
   <input type="text" name="luongThang" class="form-control" value="" readonly id="luongThangInput">
 </div>
 
-
-<div class="form-group">
-  <label for="luongThang">Lương thưởng thêm:</label>
-  <input type="text" name="luongThuongThem" class="form-control">
-</div>
-
-
 <div class="form-group">
   <label for="luongThang">Lương trừ vi phạm( VND ):</label>
-  <input type="text" name="luongTru" class="form-control">
+  <table id="listViPham" class="table table-bordered">
+<thead>
+      <tr>
+      <th>Mã nv</th>
+      <th>Lỗi vi phạm</th>
+      <th>Ngày vi phạm</th>
+      <th>Lương trừ</th>
+    </tr>
+</thead>
+<tbody>
+  
+</tbody>
+  </table>
+  <label>Tổng Lương trừ:</label>
+  <input type="text" name="luongTru" class="form-control" id="luongTru" readonly>
 </div>
 
+<div class="form-group">
+  <label for="luongThang">Lương thưởng thêm (Nếu có):</label>
+  <input type="number" name="luongThuongThem" class="form-control" min="0" value="0">
+</div>
+
+<div class="form-group">
+   <label for="luongThang">Hình thức chi trả:</label>
+ <select name="hinhThucChiTra" class="form-control">
+   <option>ATM</option>
+   <option>Tiền mặt</option>
+ </select>
+</div>
+
+<div class="form-group">
+  <label for="luongThang">Thời gian chi trả:</label>
+  <input type="date" name="thoiGianChiTra" min="{{ date("Y-m-d") }}" max="{{ date("Y-m-t") }}"  class="form-control">
+</div>
 
 
   @endif
@@ -73,7 +117,7 @@ $('#luongThangInput').val(response_data);
     
 <div class="form-group">
    
-    <input type="submit" class="form-control w3-btn" style="background-color:#4cffd9;" value="Thêm" >
+    <input type="submit" class="form-control w3-btn" style="background-color:#4cffd9;" value="Xét lương" >
   </div>
 
       </form>
@@ -86,104 +130,14 @@ $('#luongThangInput').val(response_data);
 
   </div>
 </div>
-{{-- sdasdasasasfasfasfasfasfasfasfasfafaf --}}
-<div id="changeUserInfo" class="modal fade" role="dialog">
-  <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Thay đổi thông tin nhân viên</h4>
-      </div>
-      <div class="modal-body" style="padding: 20px 60px 20px 60px;">
-        
-           @if(isset($listData))
-<select name="maNv" class="form-control" onchange="loadInfoByAjax()" id="getUserInfoByAjax" >
-                       @foreach($listData as $nhanvien )
-                       <option value="{{ $nhanvien->maNv }}">{{ $nhanvien->tenNv }}</option>
-                       @endforeach
-                       </select>
-                       @endif
-                    
-     
-
-
-        <h2>Sửa đổi</h2>
-      <form action="{{ url('changeUser') }}" method="post">
-        {{  csrf_field() }}
-       
-        <input id="changeUserInfoMaNv" type="hidden" name="maNhanVien">
-      <div class="form-group">
-    <label for="email">Tên nhân viên:</label>
-    <input id="changeUserInfoTenNv" type="text" class="form-control" placeholder="Nhập tên nhân viên" name="tenNv" required>
-  </div>
-  <div class="form-group">
-    <label for="email">Giới tính:</label>
-    <input id="changeUserInfoGioiTinh" type="text" class="form-control" id="email" name="gioiTinh" required>
-  </div>
-    <div class="form-group">
-    <label for="email">Ngày sinh:</label>
-   <select name="ngay" class="form-control" id="changeUserInfoNgay">
-    @for($i=1;$i<=31;$i++)
-    <option value="{{ $i }}">{{ $i }}</option>
-    @endfor
-   </select>
-     <label for="email">Tháng sinh:</label>
-    <select name="thang" class="form-control" id="changeUserInfoThang">
-    @for($i=1;$i<=12;$i++)
-    <option value="{{ $i }}">{{ $i }}</option>
-    @endfor
-   </select>
-     <label for="email">Năm sinh:</label>
-    <select name="nam" class="form-control" id="changeUserInfoNam">
-    @for($i=1950;$i<=Carbon\Carbon::now()->format('Y');$i++)
-    <option value="{{ $i }}">{{ $i }}</option>
-    @endfor
-   </select>
-
-  </div>
-    <div class="form-group">
-    <label for="diaChi">Địa chỉ:</label>
-    <textarea rows="12" class="form-control" name="diaChi" required id="changeUserInfoDiaChi"></textarea>
-  </div>
-    <div class="form-group">
-    <label for="Sdt">Số điện thoại:</label>
-    <input type="text" class="form-control" name="Sdt" required id="changeUserInfoSdt">
-  </div>
-      <div class="form-group">
-    <label for="chucVu">Chức vụ:</label>
-    <select name="chucVu" class="form-control" id="changeUserInfoChucVu">
-    @if(isset($listChucVu))
-        @foreach($listChucVu as $chucvu)
-<option value="{{ $chucvu->id }}">{{ $chucvu->tenGoiChucVu }}</option>
-    @endforeach
- @endif
-    </select>
- 
-  </div>
-<div class="form-group">
-   
-    <input type="submit" class="form-control w3-btn" style="background-color:#4cffd9;" value="Sửa" >
-  </div>
-
-      </form>
-       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-
-  </div>
-</div>
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
               <div class="title_left">
                 <h3>Lương tháng nhân sự</h3>
-              
+                     <h5 id="tttt"></h5>
               </div>
 
               <div class="title_right">
@@ -224,11 +178,15 @@ $('#luongThangInput').val(response_data);
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                   
+                   @if(Session::has('LuongError'))
+                   <h2 style="color: red;">{{ Session::get('LuongError') }}</h2>
+                   @endif
                     <table id="dataLuong" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Mã NV</th>
+                     
+                          <th>Tên NV</th>
+                                <th>Tháng trả lương</th>
                           <th>Lương Tháng</th>
                           <th>Lương thưởng thêm</th>
                           <th>Lương trừ</th>
@@ -236,7 +194,8 @@ $('#luongThangInput').val(response_data);
                           <th>Tình trạng chi trả</th>
                           <th>Hình thức chi trả</th>
                         <th>Thời gian chi trả</th>
-                        <th>Thao tác</th>
+                        <th>Tình trạng duyệt lương</th>
+    
                         </tr>
                       </thead>
 
@@ -244,50 +203,50 @@ $('#luongThangInput').val(response_data);
                       <tbody>
                       @if(isset($listData))
 
-                       @foreach($listData as $nhanvien )
+                       @foreach($listData as $data )
 
                         <tr>
-                           @foreach($clList as $columm )
+                        
                          
-                        <td>{{ $nhanvien->$columm  }}</td>
-                  
-                           @endforeach
+                              <td>{{ $data->tenNv  }}</td>
+                    <td>{{ date('n-Y',strtotime($data->ThangTraLuong)) }}</td>
+                      <td>{{ $data->LuongThang  }}</td>
+                        <td>{{ $data->LuongThuongThem  }}</td>
+<td>{{ $data->LuongBiTru  }}</td>
 
-                      <td>
-               
-                  
-                     
-                       
-                        <input type="image" src="{{ asset('icon/deleteUser.png') }}" width="30" height="30" data-toggle="modal" data-target="#deleteUserForm{{ $nhanvien->maNv }}">
+<td>{{ $data->LuongThang+$data->LuongThuongThem-$data->LuongBiTru }}</td>
+<td>
+  @if($data->TinhTrangChiTra==0)
+  <span>Chưa</span>
+<form action="{{ url('traLuong') }}" method="post">
+ {{  csrf_field() }}
+  <input type="hidden" name="maNV" value="{{ $data->maNV }}">
+  <input type="hidden" name="ThangTraLuong" value="{{ $data->ThangTraLuong }}">
+   <button type="submit" class="w3-btn w3-green">Đã trả lương</button>
+</form>
+@else
+  <span>Rồi</span>
+<form action="{{ url('hoanTacTraLuong') }}" method="post">
+{{  csrf_field() }}
+  <input type="hidden" name="maNV" value="{{ $data->maNV }}">
+  <input type="hidden" name="ThangTraLuong" value="{{ $data->ThangTraLuong }}">
+   <button type="submit" class="w3-btn w3-yellow">Hoàn tác</button>
+</form>
+@endif
+</td>
+<td>{{ $data->HinhThucChiTra }}</td>
+<td>{{ $data->thoiGianDuocChiTra }}</td>
+<td>
+  @if($data->tinhTrangDuyetLuong==0)
+ Chưa
+  @else
+  Rồi
+  @endif
 
-                 </td>
+</td>
+                 
                    </tr>
-        
-<div id="deleteUserForm{{ $nhanvien->maNv }}" class="modal fade" role="dialog">
-  <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Xóa sinh viên</h4>
-      </div>
-      <div class="modal-body">
-        <p>Xác định xóa nhân viên {{ $nhanvien->tenNv }} ?</p>
-        <form action="{{ url('deleteUser') }}" method="post">
-          {{  csrf_field() }}
-          <input type="hidden" name="maNv" value="{{ $nhanvien->maNv }}">
-            <input type="submit" value="Xóa" class="w3-btn w3-red">
-          
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
                  @endforeach
                  
                       @endif

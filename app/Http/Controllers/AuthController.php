@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\User;
 use App\nhanVien;
 use App\tinnhannhanvien;
+use App\QuanLyChiTraLuong;
 use Illuminate\Support\Facades\Hash;
 use Validator;
+
 class AuthController extends Controller
 {
 	
@@ -30,8 +32,10 @@ foreach($users as $user){
 	if(Hash::check($request->input('password'), $user->password)){
 $isExistUser=true;
 $currentUserChucVu=nhanVien::select('ChucVu')->where('maNv',$user->maNv)->get();
+$bangLuong=QuanLyChiTraLuong::where('maNV',$user->maNv)->get();
 $request->session()->put('currentUser', $user);
-$request->session()->put('currentUserChucVu', $currentUserChucVu);
+$request->session()->put('currentUserChucVu',$currentUserChucVu);
+$request->session()->put('currentUserBangLuong',$bangLuong);
 	}
 }
 if($isExistUser){
@@ -45,7 +49,8 @@ if($currentUserChucVu[0]->ChucVu==4){
 }elseif($currentUserChucVu[0]->ChucVu==1){
   return redirect('quanly/quanLyDatPhong');
 }else{
-    return redirect('/');
+ 
+    return redirect('xemLuong/'.$request->session()->get('currentUser')->maNv);
 }
 }else{
 	return redirect('login');

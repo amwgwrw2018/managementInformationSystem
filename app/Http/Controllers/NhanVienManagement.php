@@ -7,7 +7,7 @@ use App\nhanvien;
 class NhanVienManagement extends Controller
 {
     public function deleteUser(Request $request){
-    	nhanvien::where('maNv',$request->input('maNv'))->delete();
+    	nhanvien::where('maNv',$request->input('maNv'))->update(['remove'=>1]);
     	return redirect('/');
     }
      public function addUser(Request $request){
@@ -26,6 +26,7 @@ class NhanVienManagement extends Controller
     	$nhanvienMoi->diaChi=$diaChi;
     	$nhanvienMoi->SDT=$Sdt;
     	$nhanvienMoi->ChucVu=$chucVu;
+        $nhanvienMoi->remove=0;
     	$nhanvienMoi->save();
     	return redirect('/');
     }

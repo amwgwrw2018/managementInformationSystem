@@ -71,7 +71,14 @@ $('#changeCustomerInfoSoCMND').val(data.soCMND);
   </div>
   <div class="form-group">
     <label for="sdt">Bên trung gian (nếu có):</label>
-<input type="text" name="benTrungGian" class="form-control">
+    @if(isset($benTrungGian))
+    <select name="benTrungGian" class="form-control" >
+      @foreach($benTrungGian as $btg)
+      <option value="{{ $btg->maBenTrungGian }}">{{ $btg->benTrungGian }}</option>
+      @endforeach
+    </select>
+    @endif
+
 
   </div>
 <div class="form-group">
@@ -146,6 +153,7 @@ $('#changeCustomerInfoSoCMND').val(data.soCMND);
   </div>
   <div class="form-group">
     <label for="sdt">Bên trung gian (nếu có):</label>
+    
 <input type="text" name="benTrungGian" class="form-control" id="changeCustomerInfoBenTrungGian">
 
   </div>
@@ -195,7 +203,12 @@ $('#changeCustomerInfoSoCMND').val(data.soCMND);
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
+                        @if(Session::has('khachhangtontaiError'))
+                 
+                    <h3 style="color: red;">{{ Session::get('khachhangtontaiError') }}</h3>
+                    @endif
                     <h2>Khách hàng</h2>
+                
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>

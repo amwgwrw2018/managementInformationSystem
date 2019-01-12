@@ -176,7 +176,8 @@ Laravel\Socialite\SocialiteServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\nhutProvider::class,   
+        App\Providers\nhutProvider::class, 
+ Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -228,6 +229,7 @@ Laravel\Socialite\SocialiteServiceProvider::class,
 'Form' => Illuminate\Html\FormFacade::class,
 'Html' => Illuminate\Html\HtmlFacade::class,
 'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

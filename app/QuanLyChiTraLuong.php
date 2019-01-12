@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class QuanLyChiTraLuong extends Model
 {
    	 protected $table ='quanlyluong';
-     protected $fillable = ['maNV','LuongThang','LuongThuongThem','LuongBiTru','TongLuong','TinhTrangChiTra','HinhThucChiTra','thoiGianDuocChiTra'];
+     protected $fillable = ['maNV','ThangTraLuong','LuongThang','LuongThuongThem','LuongBiTru','TinhTrangChiTra','HinhThucChiTra','thoiGianDuocChiTra','tinhTrangDuyetLuong'];
+         public $timestamps = false;
 }

@@ -1,79 +1,27 @@
 @extends('adminMasterLayout')
 @section('pageContent')
-<script type="text/javascript">
-  function loadInfoByAjax(){
 
-
-$.ajax({
-    url:"{{ url('loadInfoByAjaxForRoom') }}",
-   
-    type: "POST",
-   
-     data: { maPhong:$('#getRoomInfoByAjax').val(),
-  "_token": "{{ csrf_token() }}"
-
-     },
-    success:function(response_data) {
-
-      var data=JSON.parse(response_data);
-      $('#changeUserInfoMaPhong').val(data.maPhong);
-$('#changeRoomInfoSoPhong').val(data.soPhong);
-      $('#changeRoomInfoLoaiPhong').val(data.loaiPhong);
-      $('#changeRoomInfoKichThuoc').val(data.kichThuoc);
-   
-      $('#changeRoomInfoTang').val(data.tang);
-         $('#changeRoomInfoTinhTrang').val(data.tinhTrangThuePhong);
-
-    }
- });
-  }
-</script>
-<div id="addRoom" class="modal fade" role="dialog">
+<div id="addBTG" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Thêm phòng mới</h4>
+        <h4 class="modal-title">Bên trung gian mới</h4>
       </div>
       <div class="modal-body" style="padding: 20px 60px 20px 60px;">
-      <form action="{{ url('addRoom') }}" method="post">
+      <form action="{{ url('addBTG') }}" method="post">
         {{  csrf_field() }}
 
       <div class="form-group">
-    <label for="soPhong">Số phòng:</label>
-    <input  type="text" class="form-control" placeholder="Nhập số phòng mới" name="soPhong" required>
+    <label for="tenGoiKH">Tên bên trung gian:</label>
+    <input  type="text" class="form-control" placeholder="Nhập tên trung gian" name="tenTGian" required>
   </div>
-  <div class="form-group">
-    <label for="loaiPhong">Loại phòng:</label>
-   <select name="loaiPhong" class="form-control" >
-      @if(isset($listLoaiPhong))
-    @foreach($listLoaiPhong as $loaiPhong)
-       <option value="{{ $loaiPhong->maLoaiPhong }}">
-        {{ $loaiPhong->tenLoaiPhong }}
-      </option>
-    @endforeach
-    @endif
-    </select>
+ <div class="form-group">
+    <label for="tenGoiKH">Số điện thoại liên hệ:</label>
+    <input  type="text" class="form-control" placeholder="Số điện thoại liên hệ" name="SDTTGian" required>
   </div>
-    <div class="form-group">
-    <label for="kichThuoc">Kích thước:</label>
-<input type="number" name="kichThuoc" class="form-control" required>
-
-  </div>
-    <div class="form-group">
-    <label for="tang">Tầng:</label>
-   <select name="tang" class="form-control" >
-     @for($i=1;$i<=4;$i++)
-     <option value="{{ $i }}">
-       {{ $i }}
-     </option>
-     @endfor
-   </select>
-  </div>
-
-  
 <div class="form-group">
    
     <input type="submit" class="form-control w3-btn" style="background-color:#4cffd9;" value="Thêm" >
@@ -89,22 +37,22 @@ $('#changeRoomInfoSoPhong').val(data.soPhong);
 
   </div>
 </div>
-<div id="changeRoomInfo" class="modal fade" role="dialog">
+<div id="changeCustomerInfo" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Thay đổi thông tin phòng</h4>
+        <h4 class="modal-title">Thay đổi thông tin khách hàng:</h4>
       </div>
       <div class="modal-body" style="padding: 20px 60px 20px 60px;">
         
            @if(isset($listData))
              <div class="form-group">
-<select name="maNv" class="form-control" onchange="loadInfoByAjax()" id="getRoomInfoByAjax" >
-                       @foreach($listData as $phong )
-                       <option value="{{ $phong->maPhong }}">{{ $phong->soPhong }}</option>
+<select name="maKH" class="form-control" onchange="loadInfoByAjax()" id="getCustomerInfoByAjax" >
+                       @foreach($listData as $khachhang )
+                       <option value="{{ $khachhang->maKH }}">{{ $khachhang->tenGoiKH }}</option>
                        @endforeach
                        </select>
                        @endif
@@ -113,43 +61,46 @@ $('#changeRoomInfoSoPhong').val(data.soPhong);
 
 
         <h2>Sửa đổi</h2>
-      <form action="{{ url('changeRoom') }}" method="post">
+      <form action="{{ url('changeCustomer') }}" method="post">
         {{  csrf_field() }}
        
-        <input id="changeUserInfoMaPhong" type="hidden" name="maPhong">
+        <input id="changeCustomerInfoMaKH" type="hidden" name="maKH">
       <div class="form-group">
-    <label for="soPhong">Số phòng:</label>
-    <input id="changeRoomInfoSoPhong" type="text" class="form-control" placeholder="Nhập tên phòng" name="soPhong" required>
+    <label for="tenGoiKH">Tên khách hàng:</label>
+    <input  type="text" class="form-control" placeholder="Nhập tên khách hàng" name="tenGoiKH" required id="changeCustomerInfoTenGoiKH">
   </div>
   <div class="form-group">
-    <label for="loaiPhong">Loại phòng:</label>
-   <select name="loaiPhong" class="form-control" id="changeRoomInfoLoaiPhong">
-    @if(isset($listLoaiPhong))
-    @foreach($listLoaiPhong as $loaiPhong)
-       <option value="{{ $loaiPhong->maLoaiPhong }}">
-        {{ $loaiPhong->tenLoaiPhong }}
+    <label for="soCMND">Số CMND:</label>
+    <input type="text" name="soCMND" class="form-control" required id="changeCustomerInfoSoCMND">
+ 
+  </div>
+    <div class="form-group">
+    <label for="sdt">Số điện thoại:</label>
+<input type="text" name="sdt" class="form-control" required id="changeCustomerInfoSDT">
+
+  </div>
+
+    <div class="form-group">
+    <label for="loaiKH">Loại khách hàng:</label>
+     <select name="loaiKH" class="form-control" id="changeCustomerInfoLoaiKH">
+      @if(isset($listLoaiKhachHang))
+    @foreach($listLoaiKhachHang as $loaiKH)
+       <option value="{{ $loaiKH->maLoaiKhachHang }}">
+        {{ $loaiKH->tenLoaiKhachHang }}
       </option>
     @endforeach
     @endif
-   
     </select>
   </div>
-    <div class="form-group">
-    <label for="kichThuoc">Kích thước:</label>
-<input type="number" name="kichThuoc" class="form-control" id="changeRoomInfoKichThuoc">
+  <div class="form-group">
+    <label for="sdt">Bên trung gian (nếu có):</label>
+<input type="text" name="benTrungGian" class="form-control" id="changeCustomerInfoBenTrungGian">
 
   </div>
-    <div class="form-group">
-    <label for="tang">Tầng:</label>
-   <select name="tang" class="form-control" id="changeRoomInfoTang">
-     @for($i=1;$i<=4;$i++)
-     <option value="{{ $i }}">
-       {{ $i }}
-     </option>
-     @endfor
-   </select>
-  </div>
- 
+
+
+
+
   
 <div class="form-group">
    
@@ -166,14 +117,12 @@ $('#changeRoomInfoSoPhong').val(data.soPhong);
 
   </div>
 </div>
-
-
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Phòng</h3>
+                <h3>Bên trung gian</h3>
               </div>
 
               <div class="title_right">
@@ -194,7 +143,7 @@ $('#changeRoomInfoSoPhong').val(data.soPhong);
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Phòng</h2>
+                    <h2>Bên trung gian</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -214,54 +163,46 @@ $('#changeRoomInfoSoPhong').val(data.soPhong);
                   </div>
                   <div class="x_content">
                    
-                    <table id="dataPhong" class="table table-striped table-bordered">
+                    <table id="dataBTG" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Mã Phòng</th>
-                          <th>Số Phòng</th>
-                          <th>Kích Thước</th>
-                          <th>Loại phòng</th>
-                          <th>Tầng</th>
-              
+                          <th>Mã bên trung gian</th>
+                          <th>Bên trung gian</th>
+                         <th>Số điện thoại liên hệ</th>
                   <th>Thao tác</th>
                         </tr>
                       </thead>
 
 
                       <tbody>
-                      @if(isset($listData))
-                        @foreach($listData as $phong )
+                      @if(isset($data))
+                        @foreach($data as $bentrunggian )
+                        @if($bentrunggian->remove==0)
                         <tr>
-                           @foreach($clList as $columm )
-                                @if($columm=="loaiPhong")
-                        <td>{{ $phong->tenLoaiPhong  }}</td>
-                       @else
-                        <td>{{ $phong->$columm  }}</td>
-                        @endif
-             
-                       
-                           @endforeach
-                           <td>
+<td>{{ $bentrunggian->maBenTrungGian }}</td>
+<td>{{ $bentrunggian->benTrungGian }}</td>
+<td>{{ $bentrunggian->SoDienThoaiLienHe }}</td>
+                         
+                               <td>
                              
-<input type="image" src="{{ asset('icon/removeHouse.png') }}" width="30" height="30" data-toggle="modal" data-target="#deleteRoomForm{{ $phong->maPhong }}">
+<input type="image" src="{{ asset('icon/removeCustomer.png') }}" width="30" height="30" data-toggle="modal" data-target="#deleteCustomerForm{{ $bentrunggian->maBenTrungGian }}">
 
                            </td>
                         </tr>
-                        {{-- xoa phong --}}
-                        <div id="deleteRoomForm{{ $phong->maPhong }}" class="modal fade" role="dialog">
+                                           <div id="deleteCustomerForm{{ $bentrunggian->maBenTrungGian }}" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Xóa phòng</h4>
+        <h4 class="modal-title">Xóa bên trung gian</h4>
       </div>
       <div class="modal-body">
-        <p>Xác định xóa phòng số {{ $phong->soPhong }} ?</p>
-        <form action="{{ url('deleteRoom') }}" method="post">
+        <p>Xác định xóa bên trung gian {{ $bentrunggian->benTrungGian }} ?</p>
+        <form action="{{ url('deleteBenTG') }}" method="post">
           {{  csrf_field() }}
-          <input type="hidden" name="maPhong" value="{{ $phong->maPhong }}">
+          <input type="hidden" name="maBenTrungGian" value="{{ $bentrunggian->maBenTrungGian }}">
             <input type="submit" value="Xóa" class="w3-btn w3-red">
           
         </form>
@@ -273,6 +214,7 @@ $('#changeRoomInfoSoPhong').val(data.soPhong);
 
   </div>
 </div>
+                        @endif
                  @endforeach
                       @endif
                       </tbody>

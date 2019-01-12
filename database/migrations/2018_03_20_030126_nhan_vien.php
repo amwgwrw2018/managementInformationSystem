@@ -21,6 +21,7 @@ class NhanVien extends Migration
             $table->text('diaChi');
             $table->string('SDT');
              $table->string('ChucVu');
+             $table->integer('remove',10)
        
         });
     }
